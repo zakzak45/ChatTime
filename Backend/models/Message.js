@@ -1,19 +1,30 @@
-const mongoose = require("mongoose")
-const User = require("./userModel")
+const User = require('../models/userModel')
 
+const mongoose = require('mongoose')
 
-const messageSchema = new mongoose.Schema({
- SendBy:{
-    type:String,
- },
- text:{
-    type:String,
-    
- }
+const MessageSchmema = new mongoose.Schema({
+SendBy:
+{
+   type:mongoose.Schema.Types.ObjectId,
+   ref:"User",
+   required:true,
+},
+SendAt:{
+   type:mongoose.Schema.Types.ObjectId,
+   ref:"User",
+   required:true
+},
+chat:{
+   type:String,
+   required:true
+},
+ timestamp: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 
 
-module.exports = mongoose.model("message",messageSchema)
-
+module.exports = mongoose.model("message",MessageSchmema)
 

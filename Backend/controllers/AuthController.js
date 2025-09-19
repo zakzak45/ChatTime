@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import { generateToken } from "../config/utils.js";
-
+import cloudinary from "../config/cloudinary.js"
 
 export const signup = async (req, res) => {
   const { username, email, password} = req.body;
@@ -85,8 +85,30 @@ res.status(500).json({message:"internal server error"})
 
 export const updateProfile = async(req,res)=>{
   try{
+const {profilePic}=  req.body 
+const userId =req.user._id
+
+if(!profilePic){
+  res.status(400).json({message:"profilePic is required"})
+}
+const uploadResponse =await cloudinary.uploader.upload(profilePic) 
+const updatedUser = await User.findByIdAndUpdate(userId,{profilePic:uploadResponse.secure_url},{  new:true})
+res.status(200).json({updatedUser})
 
   }catch(err){
 
+  console.log("error in updated profile ", err)
+  res.status(500).json({message:"internal server error"})
+
+  }
+}
+
+
+export const checkAuth = (req,res)=>{
+  try {
+  res.status(200).json(req.user)
+  }catch(error){
+console.log("Error in checkAuth controller ",error.message)
+res.status(500).json({message:"internal server error"})
   }
 }

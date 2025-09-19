@@ -1,25 +1,23 @@
-import mongoose from "mongoose";
-import User from "../models/userModel.js"; // if needed
+import mongoose from "mongoose"
 
 const MessageSchema = new mongoose.Schema({
-  sendBy: {
+  sendId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  sendAt: {
-    type: Date, // timestamp when the message was sent
-    default: Date.now,
-    required: true,
+  receiverId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:true
   },
   chat: {
     type: String,
     required: true,
   },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
+  image:{
+    type:String
+  }
 });
 
 export default mongoose.model("Message", MessageSchema);
